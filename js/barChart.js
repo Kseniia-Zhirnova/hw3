@@ -58,14 +58,11 @@ class BarChart {
             .call(d3.axisLeft(yScale));
         // Create the bars (hint: use #bars)
         var bars = d3.select("#bars").selectAll('rect');
-        if (!bars.length) {
-            d3.select("#bars").selectAll('rect')
-                .data(this.allData)
-                .enter()
-                .append('rect');
-            bars = d3.select("#bars").selectAll('rect');
-        }
-        bars.transition()
+        bars.data(this.allData)
+            .enter()
+            .append('rect')
+            .merge(bars)
+            .transition()
             .attr('x',  function(d) {
                 return xScale(d.year) + yAxisWidth;
             })
