@@ -64,7 +64,25 @@ class Map {
 
         // Draw the background (country outlines; hint: use #map)
         // Make sure and add gridlines to the map
-
+        var geoWorld = topojson.feature(world, world.objects.countries);
+        var map = d3.select('#map');
+        var geoPath = d3.geoPath()
+            .projection(this.projection);
+        map.selectAll('path.countries')
+            .data(geoWorld.features)
+            .enter()
+            .append('path')
+            .classed('countries', true)
+            .attr('id', function(d) { return d.id; })
+            .attr('d', geoPath);
+        var graticule = d3.geoGraticule();
+        d3.select('#map').selectAll('path.grat')
+            .data(graticule.lines())
+            .enter()
+            .append('path')
+            .classed('grat', true)
+            .style('fill', 'none')
+            .attr('d', geoPath);
         // Hint: assign an id to each country path to make it easier to select afterwards
         // we suggest you use the variable in the data element's .id field to set the id
 
