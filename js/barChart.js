@@ -17,28 +17,28 @@ class BarChart {
      * Render and update the bar chart based on the selection of the data type in the drop-down box
      */
     updateBarChart(selectedDimension) {
-
         // ******* TODO: PART I *******
+        var pad = 2;
         var barChart = d3.select('#barChart');
         var xAxisHeight = 50;
         var yAxisWidth = 70;
-        var barsHeight = barChart.attr('height') - xAxisHeight;
+        var barsHeight = barChart.attr('height') - xAxisHeight - 2*pad;
         var barsWidth = barChart.attr('width') - yAxisWidth;
         // Create the x and y scales; make
         // sure to leave room for the axes
         var xScale = d3.scaleBand()
             .domain(this.allData.map(function(d) { return d.year; }).sort())
             .range([0, barsWidth])
-            .round(true)
-            .paddingOuter(0.2)
-            .paddingInner(0.2);
+            .paddingInner(0.1)
+            .round(true);
         var yScale = d3.scaleLinear()
             .domain([0, d3.max(this.allData, function(d) { return d[selectedDimension]; })])
             .range([barsHeight, 0]);
         // Create colorScale
         var colorScale = d3.scaleLinear()
-            .domain([d3.max(this.allData, function(d) { return d[selectedDimension]; }), 0])
+            .domain([0, d3.max(this.allData, function(d) { return d[selectedDimension]; })])
             .range(['cyan', 'darkblue']);
+        var max = d3.max(this.allData, function(d) { return d[selectedDimension]; });
         // Create the axes (hint: use #xAxis and #yAxis)
         var xAxis = d3.select("#xAxis");
         xAxis.attr('height', xAxisHeight)
@@ -46,7 +46,7 @@ class BarChart {
             .attr('transform', 'translate(' + yAxisWidth + ', ' + barsHeight + ')')
             .call(d3.axisBottom(xScale))
             .selectAll("text")
-            .attr("transform", "rotate(-90)")
+            .attr("transform", "translate( -15, 10), rotate(-90)")
             .style('text-anchor', 'end')
             .style('margin', '1em');
         var yAxis = d3.select("#yAxis");
@@ -56,24 +56,28 @@ class BarChart {
             .attr('transform', 'translate( '+ yAxisWidth + ', 0)')
             .call(d3.axisLeft(yScale));
         // Create the bars (hint: use #bars)
-        var bars = d3.select("#bars").selectAll('rect')
-            .data(this.allData)
-            .enter()
-            .append('rect')
-                .attr('x',  function(d) {
-                    return xScale(d.year) + yAxisWidth;
-                })
-                .attr('width', 20);
-        bars.attr('y', function(d) {
-                return barsHeight - yScale(d[selectedDimension]);
+        var bars = bars = d3.select("#bars").selectAll('rect');
+        if (!bars.length) {
+            d3.select("#bars").selectAll('rect')
+                .data(this.allData)
+                .enter()
+                .append('rect');
+            bars = d3.select("#bars").selectAll('rect');
+        }
+        bars.transition()
+            .attr('x',  function(d) {
+                return xScale(d.year) + yAxisWidth;
+            })
+            .attr('width', xScale.bandwidth())
+            .attr('y', function(d) {
+                return yScale(d[selectedDimension]);
             })
             .attr('height', function(d) {
-                return yScale(d[selectedDimension]);
+                return barsHeight - yScale(d[selectedDimension]);
             })
             .style('fill', function(d) {
                 return colorScale(d[selectedDimension]);
             });
-
 
 
         // ******* TODO: PART II *******
