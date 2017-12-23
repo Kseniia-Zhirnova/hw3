@@ -56,7 +56,7 @@ class BarChart {
             .attr('transform', 'translate( '+ yAxisWidth + ', 0)')
             .call(d3.axisLeft(yScale));
         // Create the bars (hint: use #bars)
-        bars = d3.select("#bars").selectAll('rect')
+        var bars = d3.select("#bars").selectAll('rect')
             .data(this.allData)
             .enter()
             .append('rect')
