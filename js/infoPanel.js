@@ -13,10 +13,18 @@ class InfoPanel {
     updateInfo(oneWorldCup) {
 
         // ******* TODO: PART III *******
-
         // Update the text elements in the infoBox to reflect:
         // World Cup Title, host, winner, runner_up, and all participating teams that year
-
+        d3.select('#edition').text(oneWorldCup.EDITION);
+        d3.select('#host').text(oneWorldCup.host);
+        d3.select('#winner').text(oneWorldCup.winner);
+        d3.select('#silver').text(oneWorldCup.runner_up);
+        d3.select('#teams').selectAll('ul').remove();
+        d3.select('#teams').append('ul').selectAll('li')
+                .data(oneWorldCup.teams_names)
+                .enter()
+                .append('li')
+                .text(function(d) { return d;});
         // Hint: For the list of teams, you can create an list element for each team.
         // Hint: Select the appropriate ids to update the text content.
 

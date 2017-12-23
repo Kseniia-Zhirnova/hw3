@@ -34,6 +34,7 @@ d3.csv("data/fifa-world-cup.csv", function (error, allData) {
 
     // Draw the Bar chart for the first time
     barChart.updateBarChart('attendance');
+    infoPanel.updateInfo(allData[0]);
 });
 
 /**

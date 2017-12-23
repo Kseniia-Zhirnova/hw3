@@ -24,6 +24,7 @@ class BarChart {
         var yAxisWidth = 70;
         var barsHeight = barChart.attr('height') - xAxisHeight - 2*pad;
         var barsWidth = barChart.attr('width') - yAxisWidth;
+        var infoPanel = this.infoPanel;
         // Create the x and y scales; make
         // sure to leave room for the axes
         var xScale = d3.scaleBand()
@@ -56,7 +57,7 @@ class BarChart {
             .attr('transform', 'translate( '+ yAxisWidth + ', 0)')
             .call(d3.axisLeft(yScale));
         // Create the bars (hint: use #bars)
-        var bars = bars = d3.select("#bars").selectAll('rect');
+        var bars = d3.select("#bars").selectAll('rect');
         if (!bars.length) {
             d3.select("#bars").selectAll('rect')
                 .data(this.allData)
@@ -79,16 +80,20 @@ class BarChart {
                 return colorScale(d[selectedDimension]);
             });
 
-
         // ******* TODO: PART II *******
 
         // Implement how the bars respond to click events
         // Color the selected bar to indicate is has been selected.
         // Make sure only the selected bar has this new color.
-
+        bars.on('click', function(d, i) {
+            bars.style('fill', function(d) {
+                return colorScale(d[selectedDimension]);
+            });
+            d3.select(this).transition().style('fill', 'red');
+            infoPanel.updateInfo(d);
+        })
         // Call the necessary update functions for when a user clicks on a bar.
         // Note: think about what you want to update when a different bar is selected.
-
     }
 
     /**
