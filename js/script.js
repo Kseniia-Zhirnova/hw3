@@ -27,6 +27,7 @@ d3.csv("data/fifa-world-cup.csv", function (error, allData) {
     d3.json("data/world.json", function (error, world) {
         if (error) throw error;
         worldMap.drawMap(world);
+        worldMap.updateMap(allData[0]);
     });
 
     // Define this as a global variable

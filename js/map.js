@@ -16,7 +16,17 @@ class Map {
         // ******* TODO: PART V*******
         // Clear the map of any colors/markers; You can do this with inline styling or by
         // defining a class style in styles.css
-
+        var allCountries = d3.select('#map').selectAll('path.team');
+        allCountries.each(function(p) {
+            d3.select(this)
+                .classed('team', false)
+                .classed('countries', true);
+        })
+        var host = d3.select('#map').select('path.host');
+        host.classed('host', false)
+            .classed('countries', true);
+        var points = d3.select('#points').selectAll('*');
+        points.remove();
         // Hint: If you followed our suggestion of using classes to style
         // the colors and markers for hosts/teams/winners, you can use
         // d3 selection and .classed to set these classes on and off here.
@@ -40,17 +50,34 @@ class Map {
         // as well as a .silver. These have styling attributes for the two
         // markers.
 
-
         // Select the host country and change it's color accordingly.
-
+        var host = d3.select('#' + worldcupData.host_country_code);
+        host.classed('countries', false)
+            .classed('host', true);
         // Iterate through all participating teams and change their color as well.
-
+        var countries = d3.select('#map').selectAll('path.countries');
+        countries.each(function(p) {
+            if (worldcupData.teams_iso.indexOf(p.id) != -1) {
+                d3.select(this).classed('countries', false).classed('team', true);
+            }
+        })
         // We strongly suggest using CSS classes to style the selected countries.
 
-
         // Add a marker for gold/silver medalists
+        var co = {win: this.projection(worldcupData.win_pos), ru: this.projection(worldcupData.ru_pos)};
+        var points = d3.select('#points');
+        points.append('circle')
+            .attr('cx', co.win[0])
+            .attr('cy', co.win[1])
+            .attr('r', 8)
+            .classed('gold', true);
+        points.append('circle')
+            .attr('cx', co.ru[0])
+            .attr('cy', co.ru[1])
+            .attr('r', 8)
+            .classed('silver', true);
+        var pt = this.projection(worldcupData.win_pos);
     }
-
     /**
      * Renders the actual map
      * @param the json data with the shape of all countries

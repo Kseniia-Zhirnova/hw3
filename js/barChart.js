@@ -25,6 +25,7 @@ class BarChart {
         var barsHeight = barChart.attr('height') - xAxisHeight - 2*pad;
         var barsWidth = barChart.attr('width') - yAxisWidth;
         var infoPanel = this.infoPanel;
+        var worldMap = this.worldMap;
         // Create the x and y scales; make
         // sure to leave room for the axes
         var xScale = d3.scaleBand()
@@ -86,8 +87,9 @@ class BarChart {
             bars.style('fill', function(d) {
                 return colorScale(d[selectedDimension]);
             });
-            d3.select(this).transition().style('fill', 'red');
+            d3.select(this).style('fill', 'red');
             infoPanel.updateInfo(d);
+            worldMap.updateMap(d);
         })
         // Call the necessary update functions for when a user clicks on a bar.
         // Note: think about what you want to update when a different bar is selected.
