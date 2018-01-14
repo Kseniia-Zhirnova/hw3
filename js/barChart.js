@@ -83,6 +83,7 @@ class BarChart {
         // Implement how the bars respond to click events
         // Color the selected bar to indicate is has been selected.
         // Make sure only the selected bar has this new color.
+        bars = d3.select("#bars").selectAll('rect');
         bars.on('click', function(d, i) {
             bars.style('fill', function(d) {
                 return colorScale(d[selectedDimension]);
